@@ -16,7 +16,11 @@ const protectRoute = async (req, res, next) => {
     //calling next function
     next();
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    if (error.name === "TokenExpiredError") {
+      res.clearCookie("jwt", { httpOnly: true, sameSite: "strict" });
+      return res.status(401).json({ error: "Token expired" });
+    }
+    res.status(401).json({ error: "Invalid token" });
     console.log("Error in protectRoute ", error.message);
   }
 };
