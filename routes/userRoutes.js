@@ -12,6 +12,7 @@ import {
   addGameToProfile,
   setGamePlayingStatus,
   stopGamePlayingStatus,
+  searchUsers,
 } from "../controllers/userController.js";
 import protectRoute from "../middlewares/protectRoute.js";
 import { upload } from "../middlewares/multer.middleware.js";
@@ -28,6 +29,8 @@ const router = express.Router();
 
 router.get("/profile/:query", getUserProfile);
 router.get("/suggested", protectRoute, getSuggestedUsers);
+router.get("/search", searchUsers);
+
 router.post("/signup", signUpUser);
 router.post("/login", loginUser);
 router.post("/logout", logoutUser);

@@ -127,6 +127,29 @@ const loginUser = async (req, res) => {
     console.log("Error in loginUser : ", error.message);
   }
 };
+//seearch
+const searchUsers = async (req, res) => {
+  const { query } = req.query;
+
+  try {
+    const users = await User.find({
+      username: { $regex: query, $options: "i" },
+    })
+      .select("-password")
+      .select("-updatedAt")
+      .select("-email")
+      .select("-createdAt")
+      .select("-bio");
+
+    if (users.length === 0)
+      return res.status(404).json({ error: "No users found" });
+
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+    console.log("Error in searchUsers: ", err.message);
+  }
+};
 
 //logout user
 const logoutUser = async (req, res) => {
@@ -529,4 +552,5 @@ export {
   addGameToProfile,
   setGamePlayingStatus,
   stopGamePlayingStatus,
+  searchUsers,
 };
